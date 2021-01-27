@@ -1,5 +1,5 @@
 import datetime
-import getpass
+import time
 import random
 
 from colorama import Fore, Back
@@ -47,9 +47,9 @@ class Player(Human):
 
 
 class Dealer(Human):
-    def __init__(self, Name, LastName, Gender, BirthDay, DelaerID):
+    def __init__(self, Name, LastName, Gender, BirthDay, DealerID):
         super().__init__(Name, LastName, Gender, BirthDay)
-        self.DelaerID = DelaerID
+        self.dealer = DealerID
 
 
 def Wheel():
@@ -57,19 +57,7 @@ def Wheel():
     return WinNumber
 
 
-def RegisterPlayer():
-    PlayerName = input("Please Enter Your Name: ")
-    PlayerLastNameName = input("Please Enter Your LastName : ")
-    Playergender = input("Please Enter 1 if you are Man Esle Print 2: ")
-    PlayerBirthdate = input("Please Enter Your Birthdate : ")
-    PlayerPassword = getpass.getpass("Please Enter Your Password:")
-    PlayerUsername = input("Please Select a Useranme: ")
-    PlayerCredit = input("Enter Credit")
-    NewPlayer = Player(PlayerName, PlayerLastNameName, Playergender, PlayerBirthdate, 1, PlayerUsername, PlayerPassword,
-                       PlayerCredit)
-
-
-class table:
+class Table:
     def __init__(self):
         self.table = [[0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
                       [0, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35],
@@ -100,14 +88,62 @@ class table:
             print(Back.RESET, "\n")
 
 
-# Player1 = Player("Hamid Reza","Bakhtaki",2,"1985-06-25",1,"HamidRB","2263605",999)
-# Player1.PrintBasics()
-# Player1.GetAge()
-# Dealer1 = Dealer("Vaheh","Davitian",1,'1981-06-01',1)
-# Dealer1.PrintBasics()
-# print(Player1.Balance)
-# Player1.ChargeCredit(1000)
-# print(Player1.Balance)
-Table1 = table()
+class CHIPS:
+    def __init__(self, amount, chip_value):
+        self.money = amount
+        self.chip_value = chip_value
+        self.chip_count = self.money // self.chip_value
+        self.money = self.money % self.chip_count
+        print("You have ", self.chip_count, "+", self.money, "in cash")
+
+    def change_value(self, value):
+        self.chip_value = value
+        self.chip_count = self.money // self.chip_value
+        self.money = self.money % self.chip_count
+        print("You have ", self.chip_count, "+", self.money, "in cash")
+
+    def show_money(self):
+        print("Your Current Credit is : ", self.money + (self.chip_value * self.chip_count))
+
+
+def get_bet(chip_counts):
+    bet_list = []
+    betting = True
+    while betting and chip_counts > 0:
+        try:
+            Point = int(input("please enter an integer between 0-36 :"))
+            while 0 > Point > 36:
+                try:
+                    bet_list.append(Point)
+                except ValueError:
+                    print(' must be an Integer between 0-36')
+                    break
+            break
+        except ValueError:
+            print(' must be an Integer between 0-36')
+            return bet_list
+
+
+class BET:
+    def __init__(self):
+        self.bet_lis = []
+
+
+Player1 = Player("Hamid Reza", "Bakhtaki", 2, "1985-06-25", 1, "HamidRB", "2263605", 1000)
+Player1.PrintBasics()
+Player1.GetAge()
+Dealer1 = Dealer("Vaheh", "Davitian", 1, '1981-06-01', 1)
+Dealer1.PrintBasics()
+print(Player1.Balance)
+time.sleep(2)
+Player1.ChargeCredit(1000)
+print(Player1.Balance)
+time.sleep(2)
+Table1 = Table()
+Table1.PrintTable()
 Winner = Wheel()
-Table1.PrintTableWinner(Winner)
+Credit = CHIPS(Player1.Balance, 10)
+print(Credit.chip_count)
+time.sleep(2)
+l1 = get_bet(Credit.chip_count)
+print(l1)
